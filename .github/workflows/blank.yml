@@ -28,7 +28,7 @@ jobs:
       - name: Commitsar
         uses: aevea/commitsar@v0.20.2
         with: 
-          config: .commitsar-conventional.yaml
+          config: ${{ github.workspace }}/.commitsar-conventional.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -47,7 +47,7 @@ jobs:
       - name: Commitsar
         uses: aevea/commitsar@v0.20.2
         with: 
-          config: .commitsar-jira.yaml
+          config: ${{ github.workspace }}/.commitsar-jira.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -66,6 +66,6 @@ jobs:
       - name: Commitsar
         uses: aevea/commitsar@v0.20.2
         with: 
-          config: .commitsar-commits.yaml
+          config: ${{ github.workspace }}/.commitsar-commits.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
