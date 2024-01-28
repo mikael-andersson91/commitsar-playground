@@ -1,0 +1,8 @@
+version: 1
+verbose: true
+commits:
+  disabled: true
+pull_request:
+  jira_title: true
+  jira_keys: 
+    - MRND
