@@ -1,0 +1,6 @@
+version: 1
+verbose: true
+commits:
+  disabled: true
+pull_request:
+  conventional: true
