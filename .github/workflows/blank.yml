@@ -27,10 +27,9 @@ jobs:
 
       - name: Commitsar
         uses: aevea/commitsar@v0.20.2
-        with: 
-          config: .github/conventional/.commitsar.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMITSAR_CONFIG_PATH: .github/conventional
 
   jira-check:
     # The type of runner that the job will run on
@@ -46,10 +45,9 @@ jobs:
 
       - name: Commitsar
         uses: aevea/commitsar@v0.20.2
-        with: 
-          config: .github/jira/.commitsar.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMITSAR_CONFIG_PATH: .github/jira
 
   commit-check:
     # The type of runner that the job will run on
@@ -65,7 +63,6 @@ jobs:
 
       - name: Commitsar
         uses: aevea/commitsar@v0.20.2
-        with: 
-          config: .github/commits/.commitsar.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMITSAR_CONFIG_PATH: .github/commit
