@@ -69,13 +69,21 @@ jobs:
   
   string-array:
     runs-on: ubuntu-latest
+    outputs:
+      folder-matrix: ${{ steps.set_matrix.outputs.folder-matrix }}
     steps:
       - name: Install jq
         run: sudo apt-get install -y jq
 
-      - name: convert comma separated string to JSON array
+      - id: set_matrix
+        name: convert comma separated string to JSON array
         run: |
-          test=$(echo "string 1,string 2,string 3" | jq -R -s -c 'split(",")')
-          echo $test
-          echo ${test[0]}
-          echo ${test[1]}
+          folderMatrix=$(echo -n "string 1,string 2,string 3" | jq -R -s -c 'split(",")')
+          echo "folder-matrix=$folderMatrix" >> $GITHUB_OUTPUT
+
+  use-string-array:
+    needs: string-array
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use the output from the previous step
+        run: echo ${{ needs.string-array.outputs.folder-matrix }}
