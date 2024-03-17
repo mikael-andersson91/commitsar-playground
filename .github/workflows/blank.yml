@@ -75,5 +75,7 @@ jobs:
 
       - name: convert comma separated string to JSON array
         run: |
-          test="string 1,string2,string3" | jq -R -s -c 'split(',')'
+          test=$(echo "string 1,string 2,string 3" | jq -R -s -c 'split(",")')
           echo $test
+          echo ${test[0]}
+          echo ${test[1]}
