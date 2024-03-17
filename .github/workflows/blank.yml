@@ -66,3 +66,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COMMITSAR_CONFIG_PATH: .github/commit
+  
+  string-array:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: convert comma separated string to JSON array
+        run: |
+          test="string 1,string2,string3" | jq -R -s -c 'split(',')'
+          echo $test
