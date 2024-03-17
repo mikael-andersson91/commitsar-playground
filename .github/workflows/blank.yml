@@ -13,6 +13,42 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
+  conventional-check:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Commitsar
+        uses: aevea/commitsar@v0.20.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMITSAR_CONFIG_PATH: .github/conventional
+
+  jira-check:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Commitsar
+        uses: aevea/commitsar@v0.20.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMITSAR_CONFIG_PATH: .github/jira
+
   commit-check:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -27,7 +63,27 @@ jobs:
 
       - name: Commitsar
         uses: aevea/commitsar@v0.20.2
-        with: 
-          config: .commitsar.yaml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMITSAR_CONFIG_PATH: .github/commit
+  
+  string-array:
+    runs-on: ubuntu-latest
+    outputs:
+      folder-matrix: ${{ steps.set_matrix.outputs.folder-matrix }}
+    steps:
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - id: set_matrix
+        name: convert comma separated string to JSON array
+        run: |
+          folderMatrix=$(echo -n "string 1,string 2,string 3" | jq -R -s -c 'split(",")')
+          echo "folder-matrix=$folderMatrix" >> $GITHUB_OUTPUT
+
+  use-string-array:
+    needs: string-array
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use the output from the previous step
+        run: echo ${{ needs.string-array.outputs.folder-matrix }}
